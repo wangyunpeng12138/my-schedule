@@ -137,6 +137,7 @@ async function renderCalendar() {
   $('#range-label').textContent = label;
   const cal = $('#calendar');
   cal.className = `calendar ${mode === 'week' ? 'weekly' : mode}`;
+  cal.style.gridTemplateRows = `auto repeat(${weeks}, minmax(0, 1fr))`; // 撑满可视高度，整月一页显示
   const wds = weekStart === 1 ? ['一', '二', '三', '四', '五', '六', '日'] : ['日', '一', '二', '三', '四', '五', '六'];
   let html = wds.map(w => `<div class="weekday-head">${w}</div>`).join('');
   cal.innerHTML = html;
@@ -343,7 +344,13 @@ async function saveEditor() {
   }
   if (state.editing) draft.id = state.editing.id;
   const r = await run(() => native('plans.save', { task: draft, repeat, id: state.editing?.id || null }), '已保存');
-  if (r) { $('#editor').close(); await reload(); }
+  if (r) {
+    $('#editor').close();
+    // 保存后定位到该计划的日期，保证在日历中立刻可见
+    state.selected = draft.date;
+    state.anchor = parseD(draft.date);
+    await reload();
+  }
 }
 async function deleteEditor() {
   if (!state.editing) return;
@@ -413,6 +420,7 @@ async function aiParse() {
   const d = r.draft;
   state.editing = null;
   openEditor(null, d.date || today());
+  $('#ai-dialog').close();
   const f = $('#task-form');
   if (d.title) f.title.value = d.title;
   if (d.time) f.time.value = d.time;
@@ -481,6 +489,12 @@ document.addEventListener('click', async e => {
   if (el.classList.contains('close-dialog')) { el.closest('dialog').close(); return; }
   if (el.dataset.action === 'new') { openEditor(null, state.selected === today() ? today() : state.selected); return; }
   if (el.dataset.action === 'settings') { openSettings(); return; }
+  if (el.dataset.action === 'ai') {
+    $('#ai-input').value = '';
+    $('#ai-dialog').showModal();
+    setTimeout(() => $('#ai-input').focus(), 50);
+    return;
+  }
 });
 $('#prev').onclick = () => { shiftAnchor(-1); };
 $('#next').onclick = () => { shiftAnchor(1); };
@@ -501,6 +515,7 @@ $('#task-form').onchange = e => { if (e.target.name === 'repeat') syncRepeatUI()
 $('#delete-task').onclick = deleteEditor;
 $('#save-settings').onclick = saveSettings;
 $('#ai-parse').onclick = aiParse;
+$('#ai-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); aiParse(); } });
 $('#export-backup').onclick = exportBackup;
 $('#import-backup').onclick = importBackup;
 document.addEventListener('dblclick', e => {

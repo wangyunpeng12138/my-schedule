@@ -89,10 +89,19 @@ input, select, textarea { font: inherit; color: var(--ink); }
 .settings-button:hover { background: var(--bg); color: var(--ink); }
 
 /* ---------- 工作区 ---------- */
-.workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y: auto; padding: 20px 24px 32px; }
-.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.workspace { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; padding: 20px 24px 24px; }
+#page-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+#calendar-page { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex: none; }
 .page-header h1 { font-size: 22px; }
 .page-header p { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+.ai-button {
+  display: flex; align-items: center; gap: 6px; padding: 8px 14px; white-space: nowrap;
+  border: 1px solid var(--green); color: var(--green); background: var(--green-soft);
+  border-radius: 10px; font-weight: 600; font-size: 13px; flex: none;
+}
+.ai-button:hover { filter: brightness(.96); }
 #search {
   border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px;
   width: 260px; background: var(--panel); outline: none;
@@ -131,15 +140,21 @@ input, select, textarea { font: inherit; color: var(--ink); }
 .segmented button.active { background: var(--green); color: #fff; }
 
 /* ---------- 日历 ---------- */
-.calendar-wrap { display: flex; gap: 14px; align-items: flex-start; }
-.calendar { flex: 1; min-width: 0; }
-.calendar.month, .calendar.four { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.calendar-wrap {
+  flex: 1; min-height: 0; display: flex; gap: 14px;
+  align-items: stretch; overflow: hidden;
+}
+.calendar { flex: 1; min-width: 0; min-height: 0; }
+.calendar.month, .calendar.four {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto repeat(6, minmax(0, 1fr)); gap: 6px;
+}
 .calendar .weekday-head {
   text-align: center; font-size: 12px; color: var(--muted); padding: 4px 0 8px;
 }
 .day-cell {
   background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-  min-height: 96px; padding: 8px; cursor: pointer; position: relative;
+  min-height: 0; min-width: 0; padding: 8px; cursor: pointer; position: relative;
   transition: border-color .12s, box-shadow .12s;
   overflow: hidden;
 }
@@ -168,8 +183,10 @@ input, select, textarea { font: inherit; color: var(--ink); }
 .more-link { font-size: 11px; color: var(--muted); margin-top: 3px; display: block; }
 
 /* 周视图：7 列卡片 */
-.calendar.weekly { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-.calendar.weekly .day-cell { min-height: 320px; }
+.calendar.weekly {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr); gap: 6px;
+}
 .weekly-task {
   display: block; width: 100%; text-align: left; margin-top: 6px; font-size: 12px;
   padding: 5px 8px; border-radius: 8px; background: var(--bg);
@@ -181,7 +198,7 @@ input, select, textarea { font: inherit; color: var(--ink); }
 /* ---------- 日面板 ---------- */
 .day-panel {
   width: 300px; flex: none; background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 16px; position: sticky; top: 0;
+  border-radius: var(--radius); padding: 16px; overflow-y: auto;
 }
 .day-panel h3 { font-size: 15px; display: flex; justify-content: space-between; align-items: baseline; }
 .day-panel .panel-lunar { font-size: 12px; color: var(--muted); margin: 2px 0 10px; }
@@ -232,6 +249,13 @@ dialog {
 }
 dialog::backdrop { background: rgba(37, 40, 45, .32); }
 dialog form, dialog > * { padding: 22px 24px; }
+dialog form { position: relative; }
+.dialog-close {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  width: 28px; height: 28px; border-radius: 8px; color: var(--muted);
+  font-size: 13px; line-height: 1; display: grid; place-items: center; padding: 0;
+}
+.dialog-close:hover { background: var(--bg); color: var(--ink); }
 dialog h3 { font-size: 17px; margin-bottom: 14px; }
 dialog h4 { font-size: 13px; color: var(--muted); margin: 14px 0 8px; }
 .field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; margin-bottom: 10px; }
@@ -288,27 +312,26 @@ dialog h4 { font-size: 13px; color: var(--muted); margin: 14px 0 8px; }
 /* ---------- 响应式：窗口缩小时的降级布局 ---------- */
 @media (max-width: 1080px) {
   .day-panel { width: 260px; }
-  .day-cell { min-height: 80px; }
-  .calendar.weekly .day-cell { min-height: 240px; }
 }
 @media (max-width: 900px) {
   :root { --sidebar-w: 200px; }
   .sidebar { padding: 12px 10px; gap: 10px; }
-  .workspace { padding: 14px 16px 24px; }
+  .workspace { padding: 14px 16px 20px; }
   .page-header h1 { font-size: 19px; }
   #search { width: 170px; }
+  .ai-button { padding: 7px 10px; }
   .calendar-wrap { flex-direction: column; }
-  .day-panel { position: static; width: 100%; box-sizing: border-box; }
-  .day-cell { min-height: 64px; padding: 6px; }
+  .day-panel { width: 100%; }
   .summary { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
   .stat-icon { width: 32px; height: 32px; font-size: 15px; }
   .stat-number { font-size: 17px; }
 }
 @media (max-width: 680px) {
-  .workspace { padding: 10px 10px 20px; }
+  .workspace { padding: 10px 10px 16px; }
   .page-header { flex-direction: column; gap: 8px; }
   #search { width: 100%; }
-  .day-cell { min-height: 52px; }
+  .ai-button { width: 100%; justify-content: center; }
+  .day-cell { padding: 6px; }
   .day-lunar, .badge.us, .badge.term { display: none; }
   .summary { gap: 8px; margin: 10px 0; }
   .toolbar { gap: 8px; }

@@ -25,9 +25,12 @@ type Draft struct {
 }
 
 const systemPrompt = `你是日程助手。把用户的自然语言转换为一条计划草稿，只输出 JSON 对象，不要任何其他文字。
+用户消息开头给出了今天的日期、星期与时间。所有相对日期（今天/明天/后天/下周三/本周末 等）必须据此换算成绝对日期，不得使用模型记忆中的日期。
 字段：title(必填,≤60字)、date(YYYY-MM-DD)、time(HH:MM 24小时)、duration(分钟,默认60)、
 reminder(提前分钟,-1/0/5/10/15/30/60/1440,默认15)、category(work/study/life,默认life)、
 priority(normal/high)、notes。无法确定日期时 date 留空。`
+
+var weekdaysCN = [...]string{"周日", "周一", "周二", "周三", "周四", "周五", "周六"}
 
 // Client HTTP 客户端。
 type Client struct {
@@ -68,13 +71,15 @@ type chatResp struct {
 	} `json:"error"`
 }
 
-// Parse 解析自然语言为草稿。
-func (c *Client) Parse(ctx context.Context, text string) (*Draft, string, error) {
+// Parse 解析自然语言为草稿。now 为当前时间，用于换算相对日期（今天/明天/下周三…）。
+func (c *Client) Parse(ctx context.Context, now time.Time, text string) (*Draft, string, error) {
+	userMsg := fmt.Sprintf("今天是 %s（%s），现在时间 %s。用户输入：%s",
+		now.Format("2006-01-02"), weekdaysCN[now.Weekday()], now.Format("15:04"), text)
 	body, err := json.Marshal(chatReq{
 		Model: c.Model,
 		Messages: []message{
 			{Role: "system", Content: systemPrompt},
-			{Role: "user", Content: text},
+			{Role: "user", Content: userMsg},
 		},
 	})
 	if err != nil {

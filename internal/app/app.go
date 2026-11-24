@@ -446,7 +446,7 @@ func (a *App) register() {
 			return nil, fmt.Errorf("invalid_input: 请先在设置中填写 AI 端点与模型")
 		}
 		c := ai.NewClient(s.AIEndpoint, s.AIModel, key)
-		draft, raw, err := c.Parse(a.ctx(), q.Text)
+		draft, raw, err := c.Parse(a.ctx(), a.svc.Now(), q.Text)
 		if err != nil {
 			return nil, err
 		}

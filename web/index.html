@@ -29,6 +29,7 @@
     <header class="page-header">
       <div><h1 id="page-title">计划日历</h1><p id="page-subtitle"></p></div>
       <div class="header-actions">
+        <button class="ai-button" data-action="ai" title="AI 智能录入">✨ AI 计划</button>
         <input id="search" type="search" placeholder="搜索计划…  按 / 聚焦" autocomplete="off">
       </div>
     </header>
@@ -115,7 +116,20 @@
   </form>
 </dialog>
 
+<dialog id="ai-dialog">
+  <button type="button" class="dialog-close close-dialog" title="关闭">✕</button>
+  <form method="dialog">
+    <h3>✨ AI 智能录入</h3>
+    <div class="ai-box">
+      <input id="ai-input" placeholder="用一句话描述计划，如：下周三下午三点开产品会一小时">
+      <button type="button" class="primary" id="ai-parse">AI 解析</button>
+    </div>
+    <p id="ai-hint" class="hint">解析结果会填入新建计划表单，确认无误后保存。AI 端点在「设置」中配置。</p>
+  </form>
+</dialog>
+
 <dialog id="settings-dialog">
+  <button type="button" class="dialog-close close-dialog" title="关闭">✕</button>
   <form method="dialog">
     <h3>设置</h3>
     <div class="field-row">
@@ -128,12 +142,7 @@
       <label class="check"><input type="checkbox" id="set-lunar"> 日历显示农历</label>
       <label class="check"><input type="checkbox" id="set-holidays"> 显示节假日角标</label>
     </div>
-    <h4>AI 智能录入（OpenAI 兼容）</h4>
-    <div class="ai-box">
-      <input id="ai-input" placeholder="用一句话描述计划，如：下周三下午三点开会一小时">
-      <button type="button" class="primary" id="ai-parse">AI 解析</button>
-    </div>
-    <p id="ai-hint" class="hint">解析结果会填入新建计划表单，确认后保存。</p>
+    <h4>AI 接口（OpenAI 兼容，供主页「✨ AI 计划」使用）</h4>
     <div class="field-row">
       <label class="field"><span>API 地址</span><input id="set-ai-endpoint" placeholder="https://api.deepseek.com/v1"></label>
       <label class="field"><span>模型</span><input id="set-ai-model" placeholder="deepseek-chat"></label>
@@ -144,8 +153,6 @@
     <div class="dialog-actions">
       <button type="button" id="export-backup">导出备份</button>
       <button type="button" id="import-backup">导入备份</button>
-      <span class="spacer"></span>
-      <button type="button" class="close-dialog">关闭</button>
     </div>
     <p id="settings-error" class="error"></p>
     <div class="dialog-actions">
