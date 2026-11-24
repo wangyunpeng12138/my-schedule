@@ -1,0 +1,28 @@
+# 构建产物
+/build/
+*.exe
+*.exe~
+*.dll
+*.pdb
+*.syso
+
+# 中间文件统一目录（本仓库约定，见 docs/development-process.md）
+/temp/*
+!/temp/.gitkeep
+
+# 测试与覆盖率
+*.test
+*.out
+coverage.html
+
+# 依赖与缓存
+/vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# 系统文件
+Thumbs.db
+.DS_Store
