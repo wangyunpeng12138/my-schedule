@@ -3,6 +3,7 @@
 
 const CATS = { work: { name: '工作', color: '#417c6a' }, study: { name: '学习', color: '#7c6ca8' }, life: { name: '生活', color: '#a4783f' } };
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmtD = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 const parseD = k => new Date(k + 'T00:00:00');
@@ -168,7 +169,7 @@ async function fillDayCell(cell, k, maxChips) {
     if (hol.lunar.term) head += `<span class="badge term">${esc(hol.lunar.term)}</span> `;
   }
   cell.insertAdjacentHTML('beforeend', head);
-  const chips = tasks.slice(0, mode === 'week' ? 99 : maxChips);
+  const chips = tasks.slice(0, state.mode === 'week' ? 99 : maxChips);
   if (state.mode === 'week') {
     for (const t of chips) cell.insertAdjacentHTML('beforeend', weeklyTaskHtml(t));
   } else {
@@ -449,7 +450,7 @@ function importBackup() {
 
 /* ---------- 事件绑定 ---------- */
 document.addEventListener('click', async e => {
-  const el = e.target.closest('[data-view],[data-mode],[data-category],[data-mini],[data-select],[data-task],[data-toggle],[data-series],[data-series-apply],[data-action],[data-reminder-action],[.close-dialog,.close-reminder]');
+  const el = e.target.closest('[data-view],[data-mode],[data-category],[data-mini],[data-select],[data-task],[data-toggle],[data-series],[data-series-apply],[data-action],[data-reminder-action],.close-dialog,.close-reminder');
   if (!el) return;
   if (el.dataset.view) { state.view = el.dataset.view; render(); return; }
   if (el.dataset.mode) { state.mode = el.dataset.mode; render(); return; }
