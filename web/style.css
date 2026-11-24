@@ -261,6 +261,7 @@ dialog h4 { font-size: 13px; color: var(--muted); margin: 14px 0 8px; }
   position: fixed; inset: 0; background: rgba(37, 40, 45, .35);
   display: grid; place-items: center; z-index: 50;
 }
+.reminder-overlay[hidden] { display: none; } /* 必须显式声明，否则 display:grid 覆盖 hidden */
 .reminder-card {
   background: var(--panel); border-radius: 16px; box-shadow: var(--shadow);
   width: min(420px, 90vw); padding: 20px 22px;

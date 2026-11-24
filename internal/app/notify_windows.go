@@ -16,7 +16,7 @@ func toastNotify(title, body string) {
 [Windows.UI.Notifications.ToastNotificationManager,Windows.UI.Notifications,ContentType=WindowsRuntime] | Out-Null
 [Windows.Data.Xml.Dom.XmlDocument,Windows.Data.Xml.Dom.XmlDocument,ContentType=WindowsRuntime] | Out-Null
 $x=New-Object Windows.Data.Xml.Dom.XmlDocument
-$x.LoadXml('<toast scenario="reminder"><visual><binding template="ToastGeneric"><text>%s</text><text>%s</text></binding></visual></toast>')
+$x.LoadXml('<toast><visual><binding template="ToastGeneric"><text>%s</text><text>%s</text></binding></visual></toast>')
 $t=New-Object Windows.UI.Notifications.ToastNotification $x
 [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Microsoft.Windows.PowerShell').Show($t)
 `
