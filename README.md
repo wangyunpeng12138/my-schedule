@@ -1,8 +1,17 @@
-# 我的日程 (my-schedule)
+<p align="center"><strong>简体中文</strong> · <a href="README.en.md">English</a></p>
+
+# 我的日程（my-schedule）
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go&logoColor=white)](https://go.dev/)
+[![Platform](https://img.shields.io/badge/平台-Windows%2010%2F11-blue)](#运行)
 
 原生 Windows 桌面日程应用：Go 核心 + WebView2 壳（方案 C+D，见 `docs/architecture.md`）。
-数据模型与业务规则对齐 [橙子日程](https://github.com/)（MIT），界面延续其橙色调设计；
-技术路线参考 agendling 的 Go 原生日历实现（见其 `docs/event-reminder-design.md`）。
+无 Electron、无外置服务、无 CDN 依赖；数据全部保存在本地 SQLite，不上传任何信息。
+
+![主界面](docs/images/screenshot-month.png)
+
+数据模型与业务规则参考并部分衍生自 [橙子日程](https://github.com/OrangeCatzhang/orange-schedule)（MIT）。
 
 ## 特性
 
@@ -11,9 +20,13 @@
 - **重复计划**：每周 1/4/8/12 次，或每天/工作日至截止日；系列操作（仅此条 / 后续全部）带 token 防漂移
 - **提醒**：提前 0–1440 分钟可选；Windows 系统通知 + 应用内提醒浮层；贪睡 10 分钟
 - **农历与节假日**：农历/干支/生肖/节气、中国法定节假日与调休补班（2025–2027 内置数据）、美国联邦假日
-- **AI 解析**：自然语言转计划草稿（任意 OpenAI 兼容端点；API Key 存 Windows 凭据管理器）
+- **AI 解析**：自然语言转计划草稿（任意 OpenAI 兼容端点；API Key 只存 Windows 凭据管理器，不落盘）
 - **备份**：导出/导入 JSON（与橙子日程格式兼容）
 - **轻量**：Go 进程约 30MB 内存，空闲零轮询（单定时器调度），冷启动 < 1 秒（不含 WebView2 首次初始化）
+
+| AI 智能录入 | 设置 |
+| :---: | :---: |
+| ![AI 解析](docs/images/screenshot-ai.png) | ![设置](docs/images/screenshot-settings.png) |
 
 ## 构建
 
@@ -82,4 +95,10 @@ go test ./...
 
 ## 许可
 
-MIT。数据模型与规则衍生自橙子日程（MIT），见 `LICENSE` 致谢声明。
+[MIT](LICENSE) © 2026 wangyunpeng12138 及本项目贡献者。
+
+## 致谢
+
+- [橙子日程（orange-schedule）](https://github.com/OrangeCatzhang/orange-schedule)
+  （MIT License，Copyright (c) OrangeCatzhang and Weeklight contributors）：
+  本项目的数据模型与业务规则参考并部分衍生自该项目，特此致谢。

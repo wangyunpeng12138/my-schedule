@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2026 my-schedule contributors
+Copyright (c) 2026 wangyunpeng12138 and my-schedule contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-本项目（my-schedule）的数据模型与业务规则参考并部分衍生自橙子日程
-（orange-schedule，MIT License，Copyright (c) 2026 OrangeCatzhang and
-Weeklight contributors）。依据其许可证条款在此声明致谢。
